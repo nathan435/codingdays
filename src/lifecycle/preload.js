@@ -10,7 +10,7 @@ const preload = function () {
     );
 
     this.load.spritesheet('dwarf',
-        'assets/warf-sprite-sheet.png',
+        'assets/dwarf-sprite-sheet.png',
         { frameWidth: 32, frameHeight: 32 }
     );
 

@@ -1,4 +1,4 @@
-import instance, { ecs } from './instance';
+import instance from './instance';
 
 const monsterData = {
     dwarf: {
@@ -10,17 +10,8 @@ const monsterData = {
 }
 
 export function spawnMonster(game) {
-  const monsterType = 'adventurer'
-  // monsterType = 'dwarf'
-  // const monsterId = ecs.entities.length + 1;
-
-  // const monster = game.physics.add.sprite(500, 320, 'adventurer');
-  // const monster = game.physics.add.sprite(500, 320, monsterData[monsterType].sprite);
-  console.log('REAL INSTANE?', instance);
-  const monster = instance.monsters.create(500, 320, 'adventurer')
-
-  // instance.monsters[monsterId] = monster;
-  // ecs.entities.push(monsterId)
+  const monsterType = 'dwarf'
+  const monster = instance.monsters.create(500, 320, monsterData[monsterType].sprite)
 
   monster.setDisplaySize(64, 64);
 
@@ -28,11 +19,6 @@ export function spawnMonster(game) {
   monster.setCollideWorldBounds(true);
 
   monster.direction = 'left';
-
-
-  // game.physics.add.collider(monster, instance.fallingBlocks);
-  // game.physics.add.collider(monster, instance.trampolines, hitTrampoline);
-  // game.physics.add.collider(monster, instance.platforms);
 }
 
 

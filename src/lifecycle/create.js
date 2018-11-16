@@ -76,6 +76,7 @@ export default function () {
   instance.fallingBlocks = this.physics.add.group();
   instance.monsters = this.physics.add.group()
   console.log(this.input)
+
   spawnMonster(this)
 
   player.direction = 'left';
