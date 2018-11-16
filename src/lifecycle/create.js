@@ -1,4 +1,5 @@
 import instance from '../instance';
+import { spawnMonster } from '../monster';
 
 const hitTrampoline = (player, trampoline) => {
   const isOnIt = player.x >= trampoline.x - 16 && player.x <= trampoline.x + 16;
@@ -62,6 +63,7 @@ export default function () {
   const gameHeight = this.game.canvas.height;
 
   instance.player = this.physics.add.sprite(320, 320, 'adventurer');
+  spawnMonster(this)
   const { player } = instance;
   player.setDisplaySize(64, 64);
 
