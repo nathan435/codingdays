@@ -1,5 +1,5 @@
 const instance = {
-    monsters: []
+    // monsters: []
 };
 
 export const ecs = {

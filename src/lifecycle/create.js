@@ -63,7 +63,6 @@ export default function () {
   const gameHeight = this.game.canvas.height;
 
   instance.player = this.physics.add.sprite(320, 320, 'adventurer');
-  spawnMonster(this)
   const { player } = instance;
   player.setDisplaySize(64, 64);
 
@@ -75,7 +74,9 @@ export default function () {
   instance.platforms = this.physics.add.staticGroup();
   instance.trampolines = this.physics.add.staticGroup();
   instance.fallingBlocks = this.physics.add.group();
+  instance.monsters = this.physics.add.group()
   console.log(this.input)
+  spawnMonster(this)
 
   player.direction = 'left';
 
@@ -99,6 +100,9 @@ export default function () {
   this.physics.add.collider(instance.player, instance.trampolines, hitTrampoline);
   this.physics.add.collider(instance.player, instance.platforms);
   this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
+
+  this.physics.add.collider(instance.monsters, instance.platforms);
+  this.physics.add.collider(instance.monsters, instance.fallingBlocks);
 
   this.add.text(100, 100, 'Best Game Ever!')
   
