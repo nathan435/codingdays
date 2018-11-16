@@ -89,19 +89,20 @@ export default function () {
   });
   */
 
+  this.forceSingleUpdate=true;
+
   this.physics.add.collider(instance.platforms, instance.fallingBlocks, fallingBlockFinalCollision);
   this.physics.add.collider(instance.player, instance.fallingBlocks);
   this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
   this.physics.add.collider(instance.player, instance.trampolines, hitTrampoline);
   this.physics.add.collider(instance.player, instance.platforms);
+  this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
 
   this.add.text(100, 100, 'Best Game Ever!')
   
   setInterval(() => {
     let x = Math.round(Math.random() * 15) + 3;
     let block = instance.fallingBlocks.create(64 * x + 32, -32, 'brick');
-    this.physics.add.collider(instance.platforms, instance.fallingBlocks, fallingBlockFinalCollision);
-    this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
     block.body.allowGravity = false;
     block.body.immovable = true;
     block.body.moves = false;
