@@ -43,4 +43,8 @@ export default function () {
         block.y += 0.5;
       }
   })
+
+  instance.monsters.children.iterate((monster) => {
+    monster.x += 0.5;
+});
 };

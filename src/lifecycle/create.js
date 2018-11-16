@@ -1,4 +1,5 @@
 import instance from '../instance';
+import { createMonster } from '../monster';
 
 const hitTrampoline = (player, trampoline) => {
   const isOnIt = player.x >= trampoline.x - 16 && player.x <= trampoline.x + 16;
@@ -7,7 +8,7 @@ const hitTrampoline = (player, trampoline) => {
     trampoline.bounced = true;
     setTimeout(() => trampoline.bounced = false, 1000);
   }
-}
+};
 
 const fallingBlockFinalCollision = (platform, fallingBlock) => {
   // let block = instance.platforms.create(480, 864 - 128, 'brick');
@@ -21,7 +22,7 @@ const fallingBlockFinalCollision = (platform, fallingBlock) => {
     instance.platforms.create(fallingBlock.x, Math.floor(fallingBlock.y / 64) * 64 +32, 'brick');
     console.log(fallingBlock)
   }
-}
+};
 
 function createAnimations() {
   this.anims.create({
@@ -87,14 +88,14 @@ export default function () {
   instance.platforms = this.physics.add.staticGroup();
   instance.trampolines = this.physics.add.staticGroup();
   instance.fallingBlocks = this.physics.add.group();
-  console.log(this.input)
+  instance.monsters = this.physics.add.group()
 
   player.direction = 'left';
 
   player.setInteractive();
   player.on('pointerdown', (test, test2) => {
     console.log(test, test2)
-  })
+  });
 
   this.input.on('gameobjectdown', (pointer, gameObject) => {
     if (instance.fallingBlocks.children.entries.indexOf(gameObject) > -1) {
@@ -107,13 +108,17 @@ export default function () {
     // gameObject.disableBody(true, true);
   });
 
+  this.forceSingleUpdate=true;
+
   this.physics.add.collider(instance.platforms, instance.fallingBlocks, fallingBlockFinalCollision);
   this.physics.add.collider(instance.player, instance.fallingBlocks);
   this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
   this.physics.add.collider(instance.player, instance.trampolines, hitTrampoline);
   this.physics.add.collider(instance.player, instance.platforms);
+  this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
 
-  this.add.text(100, 100, 'Best Game Ever!')
+  createMonster(this);
+
   
   this.time.addEvent({ delay: 2400, callback: spawnBlock, callbackScope: this, repeat: 1000});
 

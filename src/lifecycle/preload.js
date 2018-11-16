@@ -10,6 +10,12 @@ const preload = function () {
     );
     // this.load.image('adventurer', 'assets/character.png');
 
+    this.load.spritesheet('dwarf',
+        'assets/dwarf-sprite-sheet.png',
+        { frameWidth: 32, frameHeight: 32 }
+    );
+
+
     instance.cursors = this.input.keyboard.addKeys({
         up:Phaser.Input.Keyboard.KeyCodes.W,
         down:Phaser.Input.Keyboard.KeyCodes.S,

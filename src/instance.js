@@ -1,3 +1,4 @@
-const instance = {};
+const instance = {
+};
 
 export default instance;
