@@ -143,8 +143,6 @@ function spawnBlock () {
   let x = Math.round(Math.random() * 15) + 3;
   const gameHeight = this.game.canvas.height;
   let block = instance.fallingBlocks.create(64 * x + 32, instance.player.y - gameHeight, 'brick');
-  this.physics.add.collider(instance.platforms, instance.fallingBlocks, fallingBlockFinalCollision);
-  this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
   block.alpha = 0.3;
   block.tint = 0x000000;
   block.body.allowGravity = false;
