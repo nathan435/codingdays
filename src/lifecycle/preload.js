@@ -9,6 +9,12 @@ const preload = function () {
         { frameWidth: 32, frameHeight: 32 }
     );
 
+    this.load.spritesheet('dwarf',
+        'assets/warf-sprite-sheet.png',
+        { frameWidth: 32, frameHeight: 32 }
+    );
+
+
     instance.cursors = this.input.keyboard.addKeys({
         up:Phaser.Input.Keyboard.KeyCodes.W,
         down:Phaser.Input.Keyboard.KeyCodes.S,
