@@ -36,13 +36,17 @@ export function monsterTouchesPlatform(monster, platform) {
 }
 
 export function createMonster(game) {
+  const worldHeight = game.physics.world.bounds.height;
+  const gameHeight = game.game.canvas.height;
   game.physics.add.collider(instance.monsters, instance.platforms, monsterTouchesPlatform);
   game.physics.add.collider(instance.monsters, instance.fallingBlocks);
 
-  // Add debug button to spawn monsters
-  const spawnMonsterButton = game.add.text(100, 100, 'Spawn Monster!');
-  spawnMonsterButton.setInteractive();
-  spawnMonsterButton.on('pointerdown', () => { spawnMonster(this) });
+  // Add debug keyboard controls to spawn stuff
+  game.input.keyboard.on('keydown', function (event) {
+    if (event.key === 'p') {
+      spawnMonster(this);
+    }
+  });
 
   // when the player overlaps with a tile with index 17, monsterTouchesPlatform
   // will be called
