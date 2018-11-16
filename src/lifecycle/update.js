@@ -29,6 +29,12 @@ export default function () {
       player.anims.play(`idle-${instance.player.direction}`);
   }
 
+  if (cursors.space.isDown) {
+      if (player.weapon.canShoot()) {
+          player.weapon.shoot();
+      }
+  }
+
   if (cursors.up.isDown && player.body.touching.down)
   {
     player.setVelocityY(-800);

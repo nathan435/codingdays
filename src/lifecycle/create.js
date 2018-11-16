@@ -1,6 +1,9 @@
 import instance from '../instance';
 import { createMonster } from '../monster';
 
+import { spawnMonster } from '../monster';
+import { Weapon } from '../weapon.js';
+
 const hitTrampoline = (player, trampoline) => {
   const isOnIt = player.x >= trampoline.x - 16 && player.x <= trampoline.x + 16;
   if (!trampoline.bounced && isOnIt) {
@@ -10,9 +13,7 @@ const hitTrampoline = (player, trampoline) => {
   }
 };
 
-const fallingBlockFinalCollision = (platform, fallingBlock) => {
-  // let block = instance.platforms.create(480, 864 - 128, 'brick');
-  // console.log('block', block)
+function convertFallingBlockToPlatform(fallingBlock) {
   if (!fallingBlock.destroyed) {
     fallingBlock.body.immovable = true;
     fallingBlock.destroyed = true;
@@ -22,7 +23,22 @@ const fallingBlockFinalCollision = (platform, fallingBlock) => {
     instance.platforms.create(fallingBlock.x, Math.floor(fallingBlock.y / 64) * 64 +32, 'brick');
     console.log(fallingBlock)
   }
+}
+
+const fallingBlockFinalCollision = (platform, fallingBlock) => {
+  convertFallingBlockToPlatform(fallingBlock);
 };
+
+const fallingBlockHit = (bullet, fallingBlock) => {
+  convertFallingBlockToPlatform(fallingBlock);
+
+  if (!bullet.destroyed) {
+    bullet.body.immovable = true;
+    bullet.destroyed = true;
+    bullet.disableBody(true, true);
+    bullet.destroy(true);
+  }
+}
 
 function createAnimations() {
   this.anims.create({
@@ -56,6 +72,14 @@ function createAnimations() {
       frameRate: 10,
       repeat: -1
   });
+
+  this.anims.create({
+      key: 'blood-up',
+      frames: this.anims.generateFrameNumbers('blood'),
+      frameRate: 10,
+      yoyo: true,
+      repeat: -1
+  });
 }
 
 export default function () {
@@ -74,6 +98,8 @@ export default function () {
   player.body.maxVelocity.x = 400;
 
 
+  player.weapon = new Weapon('blood', 'blood-up', 1000, 60, 200, this, player);
+
   createAnimations.call(this);
   
   console.log(this.physics.world)
@@ -89,6 +115,8 @@ export default function () {
   instance.trampolines = this.physics.add.staticGroup();
   instance.fallingBlocks = this.physics.add.group();
   instance.monsters = this.physics.add.group()
+  instance.bullets = this.physics.add.group();
+  console.log(this.input)
 
   player.direction = 'left';
 
@@ -116,6 +144,7 @@ export default function () {
   this.physics.add.collider(instance.player, instance.trampolines, hitTrampoline);
   this.physics.add.collider(instance.player, instance.platforms);
   this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
+  this.physics.add.collider(instance.bullets, instance.fallingBlocks, fallingBlockHit);
 
   createMonster(this);
 
