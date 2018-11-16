@@ -2,6 +2,7 @@ import 'phaser';
 import instance from '../instance';
 
 export default function () {
+    const gameHeight = this.game.canvas.height;
     const {
         cursors,
         player,
@@ -30,10 +31,16 @@ export default function () {
 
   if (cursors.up.isDown && player.body.touching.down)
   {
-      player.setVelocityY(-330);
+    player.setVelocityY(-800);
   }
 
   fallingBlocks.children.entries.forEach((block) => {
-      block.y += 0.5;
+      if (block.fallFast) {
+          block.y += 6;
+      } else if (block.y > gameHeight / 3) {
+        block.y += 3;
+      } else {
+        block.y += 0.5;
+      }
   })
 };

@@ -8,6 +8,7 @@ const preload = function () {
         'assets/adventurer.png',
         { frameWidth: 32, frameHeight: 32 }
     );
+    // this.load.image('adventurer', 'assets/character.png');
 
     instance.cursors = this.input.keyboard.addKeys({
         up:Phaser.Input.Keyboard.KeyCodes.W,
