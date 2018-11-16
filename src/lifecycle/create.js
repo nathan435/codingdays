@@ -1,5 +1,5 @@
 import instance from '../instance';
-import { spawnMonster } from '../monster';
+import { createMonster } from '../monster';
 
 const hitTrampoline = (player, trampoline) => {
   const isOnIt = player.x >= trampoline.x - 16 && player.x <= trampoline.x + 16;
@@ -8,7 +8,7 @@ const hitTrampoline = (player, trampoline) => {
     trampoline.bounced = true;
     setTimeout(() => trampoline.bounced = false, 1000);
   }
-}
+};
 
 const fallingBlockFinalCollision = (platform, fallingBlock) => {
   // let block = instance.platforms.create(480, 864 - 128, 'brick');
@@ -22,7 +22,7 @@ const fallingBlockFinalCollision = (platform, fallingBlock) => {
     instance.platforms.create(fallingBlock.x, fallingBlock.y, 'brick');
     console.log(fallingBlock)
   }
-}
+};
 
 function createAnimations() {
   this.anims.create({
@@ -75,16 +75,13 @@ export default function () {
   instance.trampolines = this.physics.add.staticGroup();
   instance.fallingBlocks = this.physics.add.group();
   instance.monsters = this.physics.add.group()
-  console.log(this.input)
-
-  spawnMonster(this)
 
   player.direction = 'left';
 
   player.setInteractive();
   player.on('pointerdown', (test, test2) => {
     console.log(test, test2)
-  })
+  });
 
   /*
   this.input.on('gameobjectdown', function (pointer, gameObject) {
@@ -102,10 +99,8 @@ export default function () {
   this.physics.add.collider(instance.player, instance.platforms);
   this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
 
-  this.physics.add.collider(instance.monsters, instance.platforms);
-  this.physics.add.collider(instance.monsters, instance.fallingBlocks);
+  createMonster(this);
 
-  this.add.text(100, 100, 'Best Game Ever!')
   
   setInterval(() => {
     let x = Math.round(Math.random() * 15) + 3;
@@ -119,7 +114,7 @@ export default function () {
       gameObject.x = Math.round(dragX / 64) * 64 +32;
 
   });
-  }, 2000)
+  }, 2000);
 
   for (let i = 2; i < 18; i++) {
     instance.platforms.create(i * 64 + 32, gameHeight - 32, 'brick');
