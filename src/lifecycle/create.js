@@ -147,7 +147,7 @@ export default function () {
   player.weapon = new Weapon('blood', 'blood-up', 1000, 60, 200, this, player);
 
   player.life = 100;
-  lifeText = this.add.text(16, 15400, 'Life: 100', { fontSize: '32px', fill: '#000' });
+  lifeText = this.add.text(16, 15200, 'Life: 100', { fontSize: '32px', fill: '#000' });
 
   createAnimations.call(this);
 

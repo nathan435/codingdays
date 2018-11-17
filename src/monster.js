@@ -35,17 +35,16 @@ export function spawnMonster(game, x=500, y=15800) {
   })});
 }
 
-const hitPlayer = (player, monster) => {
+const hitPlayer = (player, monster, game) => {
   console.log('touched in monster');
   console.log(player);
   player.life -= 10;
   lifeText.setText('Life :' + player.life);
   if (player.life <= 0){
-    console.log('dead');
-    player.setVelocityY(-800);
+    player.setVelocityY(-2000);
     game.physics.pause();
-    player.setTint(0xff0000);
     player.anims.play('die');
+    game.add.text(game.physics.world.centerX, 15400, 'Looooooser!!', { fontSize: '200px', fill: '#ff0000' });
   }
 };
 
@@ -79,7 +78,7 @@ export function createMonster(game) {
   const worldHeight = game.physics.world.bounds.height;
   const gameHeight = game.game.canvas.height;
 
-  game.physics.add.collider(instance.player, instance.monsters, hitPlayer);
+  game.physics.add.collider(instance.player, instance.monsters, (player, monster) => hitPlayer(player, monster, game));
   game.physics.add.collider(instance.monsters, instance.platforms, monsterTouchesPlatform);
   game.physics.add.collider(instance.monsters, instance.fallingBlocks);
 
