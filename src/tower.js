@@ -119,7 +119,6 @@ export class Tower {
     }
 
     addFrozenBlock(posx, posy) {
-        console.log('frozen box')
         const block = instance.platforms.create(this.getPxlX(posx), this.getPxlY(posy), 'brick-frozen');
         block.onHit = null;
 
