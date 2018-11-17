@@ -115,6 +115,13 @@ function createAnimations() {
   });
 
   this.anims.create({
+    key: 'dwarf-attack-fast',
+    frames: this.anims.generateFrameNumbers('dwarf', {start: 20, end: 26}),
+    frameRate: 25,
+    repeat: 5
+  });
+
+  this.anims.create({
     key: 'dwarf-walk',
     frames: this.anims.generateFrameNames('dwarf', {start: 10, end: 17}),
     // frames: this.anims.generateFrameNames('dwarf', {start: 28, end: 31}),

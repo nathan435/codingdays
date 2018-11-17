@@ -49,6 +49,7 @@ export function spawnMonster(game, x=500, y=15800) {
 const hitPlayer = (player, monster, game) => {
   console.log('touched in monster');
   console.log(player);
+  monster.anims.play('dwarf-attack-fast', false);
   player.life -= 10;
   lifeText.setText('Life :' + player.life);
   if (player.life <= 0){
@@ -113,11 +114,4 @@ export function createMonster(game) {
 
 // Called on every frame Update
 export function updateMonster(game) {
-  // const monsterType = 'dwarf';
-  // const data = monsterData[monsterType];
-
-  // instance.monsters.children.iterate((monster) => {
-    // monster.anims.play('dwarf-walk', false);
-    // monster.x += data.speedX;
-  // });
 }
