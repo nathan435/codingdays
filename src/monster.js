@@ -5,6 +5,7 @@ const monsterData = {
         sprite: 'dwarf',
         x: 50,
         y: 50,
+        velocityX: 50,
     },
     adventurer: {
         sprite: 'adventurer',
@@ -12,11 +13,12 @@ const monsterData = {
     },
 };
 
-export function spawnMonster(game, x=500, y=15900) {
+export function spawnMonster(game, x=500, y=15800) {
   const monsterType = 'dwarf';
   const data = monsterData[monsterType];
   const monster = instance.monsters.create(x, y, data.sprite);
 
+  monster.setVelocityX(data.velocityX);
   monster.setDisplaySize(data.x, data.y);
 
   monster.setBounce(0);
@@ -32,6 +34,17 @@ export function spawnMonster(game, x=500, y=15900) {
   })});
 }
 
+const hitPlayer = (monster, player) => {
+  player.life -= 10;
+  lifeText.setText('Life :' + player.life)
+  if (player.life <= 0){
+    player.setTint(0xff0000);
+    player.anims.play('die');
+    
+    gameOver = true;
+  }
+}
+
 export function monsterTouchesPlatform(monster, platform) {
 
   const monsterBottom = monster.body.y + monster.body.height;
@@ -41,12 +54,21 @@ export function monsterTouchesPlatform(monster, platform) {
   if (!sameRow) {
     return false;
   }
-  platform.disableBody(true, true);
+  //platform.disableBody(true, true);
+  monster.setVelocityX(0);
+  platform.life -= 1;
+  if (platform.life <= 0){
+    platform.disableBody(true, true);
+    
+  }
+  monster.setVelocityX(50);
 }
 
 export function createMonster(game) {
   const worldHeight = game.physics.world.bounds.height;
   const gameHeight = game.game.canvas.height;
+  
+  game.physics.add.collider(instance.monsters, instance.player, hitPlayer);
   game.physics.add.collider(instance.monsters, instance.platforms, monsterTouchesPlatform);
   game.physics.add.collider(instance.monsters, instance.fallingBlocks);
 

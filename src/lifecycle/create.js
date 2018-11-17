@@ -1,6 +1,8 @@
 import instance from '../instance';
 import { createMonster } from '../monster';
 
+var lifeText;
+
 import { spawnMonster } from '../monster';
 import { Weapon } from '../weapon.js';
 
@@ -11,7 +13,18 @@ const hitTrampoline = (player, trampoline) => {
     trampoline.bounced = true;
     setTimeout(() => trampoline.bounced = false, 1000);
   }
-};
+}
+
+const hitPlayer = (monster, player) => {
+  player.life -= 10;
+  lifeText.setText('Life :' + player.life)
+  if (player.life <= 0){
+    player.setTint(0xff0000);
+    player.anims.play('die');
+    
+    gameOver = true;
+  }
+}
 
 function convertFallingBlockToPlatform(fallingBlock) {
   if (!fallingBlock.destroyed) {
@@ -20,8 +33,10 @@ function convertFallingBlockToPlatform(fallingBlock) {
     fallingBlock.disableBody(true, true);
     fallingBlock.destroy(true);
     // platform.destroy();
-    const block = instance.platforms.create(fallingBlock.x, Math.floor(fallingBlock.y / 64) * 64 +32, 'brick');
 
+    const block = instance.platforms.create(fallingBlock.x, Math.floor(fallingBlock.y / 64) * 64 +32, 'brick');
+    block.life = 100;
+    
     block.setInteractive();
     block.on('pointerdown', () => { console.log({"blockleft": block.body.x, blockTop: block.body.y, blockBottom: block.body.y + block.body.height}) });
     // console.log(fallingBlock)
@@ -88,6 +103,12 @@ function createAnimations() {
       yoyo: true,
       repeat: -1
   });
+
+  this.anims.create({
+    key: 'die',
+    frames: [ { key:'adventurer', frame: 59} ],
+    frameRate: 10,
+});
 }
 
 export default function () {
@@ -115,6 +136,9 @@ export default function () {
 
   player.weapon = new Weapon('blood', 'blood-up', 1000, 60, 200, this, player);
 
+  player.life = 100;
+  lifeText = this.add.text(16, 16, 'Life: 100', { fontSize: '32px', fill: '#000' });
+
   createAnimations.call(this);
   
   console.log(this.physics.world)
@@ -132,6 +156,8 @@ export default function () {
   instance.monsters = this.physics.add.group()
   instance.bullets = this.physics.add.group();
   console.log(this.input)
+
+  //spawnMonster(this)
 
   player.direction = 'left';
 
@@ -155,11 +181,14 @@ export default function () {
   this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
   this.physics.add.collider(instance.player, instance.trampolines, hitTrampoline);
   this.physics.add.collider(instance.player, instance.platforms);
-  this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
   this.physics.add.collider(instance.bullets, instance.fallingBlocks, fallingBlockHit);
 
   createMonster(this);
+  //this.physics.add.collider(instance.monsters, instance.player, hitPlayer);
+  //this.physics.add.collider(instance.monsters, instance.platforms, monsterTouchesPlatform);
+  //this.physics.add.collider(instance.monsters, instance.fallingBlocks);
 
+  this.add.text(100, 100, 'Best Game Ever!')
   
   this.time.addEvent({ delay: 2400, callback: spawnBlock, callbackScope: this, repeat: 1000});
 

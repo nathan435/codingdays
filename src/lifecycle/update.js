@@ -53,12 +53,13 @@ export default function () {
       }
   })
 
-  instance.monsters.children.iterate((monster) => {
-    monster.x += 0.5;
-});
+  //instance.monsters.children.iterate((monster) => {
+    //monster.x += 0.5;
+//});
     instance.player.visualBody.x = instance.player.x;
     instance.player.visualBody.y = instance.player.y - 16;
     if (instance.player.flying) player.visualBody.anims.play('fly');
 
 
 };
+      
