@@ -38,7 +38,10 @@ export default function () {
   if (cursors.up.isDown && player.body.touching.down)
   {
     player.setVelocityY(-800);
+  } else if (player.flying) {
+    player.setVelocityY(-400)
   }
+
 
   fallingBlocks.children.entries.forEach((block) => {
       if (block.fallFast) {
@@ -55,5 +58,7 @@ export default function () {
 });
     instance.player.visualBody.x = instance.player.x;
     instance.player.visualBody.y = instance.player.y - 16;
+    if (instance.player.flying) player.visualBody.anims.play('fly');
+
 
 };

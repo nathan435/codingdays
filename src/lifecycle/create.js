@@ -68,6 +68,11 @@ function createAnimations() {
       frames: [ { key: 'adventurer', frame: 4 } ],
       frameRate: 20
   });
+
+  this.anims.create({
+    key: 'fly',
+    frames: [ { key: 'ufo', frame: 0 } ],
+  });
   
   this.anims.create({
       key: 'right',
@@ -168,7 +173,17 @@ export default function () {
   instance.platforms.create(64 * 4 + 32, worldHeight - (64 * 4 -32), 'brick');
   instance.platforms.create(64 * 4 + 32, worldHeight - (64 * 5 -32), 'brick');
 
-
+  // Add debug keyboard controls
+  this.input.keyboard.on('keydown', function (event) {
+    if (event.key === 'f') {
+      if (instance.player.flying) {
+        instance.player.visualBody.setTexture('adventurer');
+      } else {
+        instance.player.visualBody.setTexture('ufo');
+      }
+      instance.player.flying = !instance.player.flying;
+    }
+  });
 
 }
 
