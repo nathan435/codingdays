@@ -3,6 +3,8 @@ import instance from '../instance';
 
 const preload = function () {
     this.load.image('brick', 'assets/brick.png');
+    this.load.image('brick', 'assets/brick-fire.png');
+    this.load.image('brick', 'assets/brick-moss.png');
     this.load.image('brick-bounce', 'assets/brick-bounce.png');
     this.load.spritesheet('adventurer',
         'assets/adventurer.png',
