@@ -14,6 +14,8 @@ export class Tower {
         this.game = game;
         this.worldHeight = worldHeight;
         this.blocks = [];
+        this.revision = 0;
+
         for (var i=0;i<=20;i++) {
             this.blocks[i] = [];
         }
@@ -26,6 +28,10 @@ export class Tower {
     }
 
     getBrick(posx, posy) {
+        if (posx < 0 || posy < 0) {
+            return null;
+        }
+        
         return this.blocks[posx][posy];
     }
 
@@ -37,8 +43,22 @@ export class Tower {
         if (brick.life <= 0) {
             brick.disableBody(true, true);
         }
+/*
+        var r = this.revision + 1;
+        this.revision = r;
+
+        var bricksToCheck = [];
+        bricksToCheck.push(brick);
+
+        while (bricksToCheck.length > 0) {
+            var brickToCheck = bricksToCheck.pop();
+            var nextBrick = this.getBrick(brickToCheck.posx + 1, brickToCheck.posy);
+            if (nextBrick !== null)
+        }
+        
 
         this.blocks[brick.posx][brick.posy] = null;
+        */
     }
 
     snapY(y) {
@@ -58,8 +78,8 @@ export class Tower {
     }
 
     initBlock(block, type) {
-        var posx = block.x / 64;
-        var posy = (block.y - 32) / 64;
+        var posx = this.snapX(block.x);
+        var posy = this.snapY(block.y);
         block.posx = posx;
         block.posy = posy;
         block.type = 'brick';
