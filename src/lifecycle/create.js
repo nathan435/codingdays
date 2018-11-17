@@ -27,7 +27,7 @@ function convertFallingBlockToPlatform(fallingBlock, type) {
     fallingBlock.destroy(true);
     // platform.destroy();
 
-    instance.tower.addBlockPx(fallingBlock.x, fallingBlock.y, 'frozen');
+    instance.tower.addBlockPx(fallingBlock.x, fallingBlock.y, type);
   }
 }
 

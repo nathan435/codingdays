@@ -82,7 +82,6 @@ export class Tower {
         var posy = this.snapY(block.y);
         block.posx = posx;
         block.posy = posy;
-        block.type = 'brick';
 
         block.type = type;
 
@@ -92,7 +91,7 @@ export class Tower {
     }
 
     addBlockPx(x, y, type) {
-        this.addBrick(this.snapX(x), this.snapY(y), type)
+        this.addBlock(this.snapX(x), this.snapY(y), type)
     }
 
     addBlock(posx, posy, type) {
@@ -120,7 +119,8 @@ export class Tower {
     }
 
     addFrozenBlock(posx, posy) {
-        const block = instance.platforms.create(this.getPxlX(posx), this.getPxlY(posy), 'brick');
+        console.log('frozen box')
+        const block = instance.platforms.create(this.getPxlX(posx), this.getPxlY(posy), 'brick-frozen');
         block.onHit = null;
 
         this.initBlock(block, 'frozen');

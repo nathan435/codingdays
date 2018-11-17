@@ -47,8 +47,9 @@ export function spawnMonster(game, x=500, y=15800) {
 }
 
 const hitPlayer = (player, monster, game) => {
-  console.log('touched in monster');
-  console.log(player);
+
+  console.log('hit');
+
   player.life -= 10;
   lifeText.setText('Life :' + player.life);
   if (player.life <= 0){
