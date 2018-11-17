@@ -1,16 +1,18 @@
 import instance from './instance';
 
 const monsterData = {
-    dwarf: {
-        sprite: 'dwarf',
-        x: 50,
-        y: 50,
-        velocityX: 50,
-    },
-    adventurer: {
-        sprite: 'adventurer',
+  dwarf: {
+    sprite: 'dwarf',
+    x: 50,
+    y: 50,
+    x: 100,
+    y: 100,
+    velocityX: 50,
+  },
+  adventurer: {
+    sprite: 'adventurer',
 
-    },
+  },
 };
 
 export function spawnMonster(game, x=500, y=15800) {
@@ -34,15 +36,30 @@ export function spawnMonster(game, x=500, y=15800) {
   })});
 }
 
+<<<<<<< HEAD
 const hitPlayer = (monster, player) => {
   player.life -= 10;
-  lifeText.setText('Life :' + player.life)
+  lifeText.setText('Life :' + player.life);
   if (player.life <= 0){
     player.setTint(0xff0000);
     player.anims.play('die');
     
     gameOver = true;
   }
+};
+
+function monsterAttack(monster, platform) {
+  monster.anims.play('dwarf-attack', false);
+
+  monster.setVelocityX(0);
+
+  platform.life -= 1;
+  if (platform.life <= 0) {
+    platform.disableBody(true, true);
+
+  }
+  // This doesn't start him walking, seems to be required to keep him attacking
+  monster.setVelocityX(50);
 }
 
 export function monsterTouchesPlatform(monster, platform) {
@@ -54,14 +71,7 @@ export function monsterTouchesPlatform(monster, platform) {
   if (!sameRow) {
     return false;
   }
-  //platform.disableBody(true, true);
-  monster.setVelocityX(0);
-  platform.life -= 1;
-  if (platform.life <= 0){
-    platform.disableBody(true, true);
-    
-  }
-  monster.setVelocityX(50);
+  monsterAttack(monster, platform);
 }
 
 export function createMonster(game) {

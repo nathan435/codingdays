@@ -108,7 +108,15 @@ function createAnimations() {
     key: 'die',
     frames: [ { key:'adventurer', frame: 59} ],
     frameRate: 10,
-});
+  });
+
+  this.anims.create({
+    key: 'dwarf-attack',
+    frames: this.anims.generateFrameNumbers('dwarf', {start: 20, end: 26}),
+    frameRate: 13,
+    yoyo: false,
+    repeat: 0
+  });
 }
 
 export default function () {
