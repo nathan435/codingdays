@@ -3,8 +3,8 @@ import instance from './instance';
 const monsterData = {
     dwarf: {
         sprite: 'dwarf',
-        x: 100,
-        y: 100,
+        x: 50,
+        y: 50,
     },
     adventurer: {
         sprite: 'adventurer',
@@ -12,7 +12,7 @@ const monsterData = {
     },
 };
 
-export function spawnMonster(game, x=500, y=320) {
+export function spawnMonster(game, x=500, y=15900) {
   const monsterType = 'dwarf';
   const data = monsterData[monsterType];
   const monster = instance.monsters.create(x, y, data.sprite);
@@ -23,16 +23,25 @@ export function spawnMonster(game, x=500, y=320) {
   monster.setCollideWorldBounds(true);
 
   monster.direction = 'left';
+
+  monster.setInteractive();
+
+  monster.on('pointerdown', () => { console.log("monster data", {
+   monsterRight: monster.body.x + monster.body.width,
+   monsterBottom: monster.body.y + monster.body.height,
+  })});
 }
 
 export function monsterTouchesPlatform(monster, platform) {
+
+  const monsterBottom = monster.body.y + monster.body.height;
+  const boxTop = platform.body.y;
+
+  const sameRow = monsterBottom > boxTop;
+  if (!sameRow) {
+    return false;
+  }
   platform.disableBody(true, true);
-  // const isOnIt = monster.x >= mons.x - 16 && player.x <= trampoline.x + 16;
-  // if (!trampoline.bounced && isOnIt) {
-    // player.setVelocityY(-500);
-    // trampoline.bounced = true;
-    // setTimeout(() => trampoline.bounced = false, 1000);
-  // }
 }
 
 export function createMonster(game) {
@@ -48,8 +57,8 @@ export function createMonster(game) {
     }
   });
 
-  // when the player overlaps with a tile with index 17, monsterTouchesPlatform
-  // will be called
-  // instance.platforms.setTileIndexCallback(17, monsterTouchesPlatform, this);
-  // this.physics.add.overlap(monster, instance.platforms);
+  // Add debug button to spawn monsters
+  const spawnMonsterButton = game.add.text(100, 100, 'Spawn Monster!');
+  spawnMonsterButton.setInteractive();
+  spawnMonsterButton.on('pointerdown', () => { spawnMonster(this, 0, 0) });
 }

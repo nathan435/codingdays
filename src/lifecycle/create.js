@@ -20,8 +20,11 @@ function convertFallingBlockToPlatform(fallingBlock) {
     fallingBlock.disableBody(true, true);
     fallingBlock.destroy(true);
     // platform.destroy();
-    instance.platforms.create(fallingBlock.x, Math.floor(fallingBlock.y / 64) * 64 +32, 'brick');
-    console.log(fallingBlock)
+    const block = instance.platforms.create(fallingBlock.x, Math.floor(fallingBlock.y / 64) * 64 +32, 'brick');
+
+    block.setInteractive();
+    block.on('pointerdown', () => { console.log({"blockleft": block.body.x, blockTop: block.body.y, blockBottom: block.body.y + block.body.height}) });
+    // console.log(fallingBlock)
   }
 }
 
@@ -97,6 +100,11 @@ export default function () {
   player.setCollideWorldBounds(true);
   player.body.maxVelocity.x = 400;
 
+  player.on('pointerdown', () => { console.log("player data", {
+   playerRight: player.body.x + player.body.width,
+   playeBottom: player.body.y + player.body.height,
+  })});
+
 
   player.weapon = new Weapon('blood', 'blood-up', 1000, 60, 200, this, player);
 
@@ -121,9 +129,6 @@ export default function () {
   player.direction = 'left';
 
   player.setInteractive();
-  player.on('pointerdown', (test, test2) => {
-    console.log(test, test2)
-  });
 
   this.input.on('gameobjectdown', (pointer, gameObject) => {
     if (instance.fallingBlocks.children.entries.indexOf(gameObject) > -1) {
@@ -152,7 +157,9 @@ export default function () {
   this.time.addEvent({ delay: 2400, callback: spawnBlock, callbackScope: this, repeat: 1000});
 
   for (let i = 2; i < 18; i++) {
-    instance.platforms.create(i * 64 + 32, (worldHeight - 32), 'brick');
+    const bl = instance.platforms.create(i * 64 + 32, (worldHeight - 32), 'brick');
+    bl.setInteractive();
+    bl.on('pointerdown', () => { console.log({"blockleft": bl.body.x, blockTop: bl.body.y}) });
   }
   instance.platforms.create(64 * 2 + 32, (worldHeight - 64 -32), 'brick');
   instance.trampolines.create(64 * 3 + 32, (worldHeight - 64 -32), 'brick-bounce');

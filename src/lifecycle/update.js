@@ -52,5 +52,5 @@ export default function () {
 
   instance.monsters.children.iterate((monster) => {
     monster.x += 0.5;
-});
+  });
 };
