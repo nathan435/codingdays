@@ -2,6 +2,7 @@ import 'phaser';
 import instance from '../instance';
 
 const preload = function () {
+    this.load.image('background', 'assets/BG.png');
     this.load.image('brick', 'assets/brick.png');
     this.load.image('ufo', 'assets/ufo.png');
     this.load.image('brick-bounce', 'assets/brick-bounce.png');

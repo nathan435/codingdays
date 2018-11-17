@@ -97,6 +97,11 @@ export default function () {
   const gameHeight = this.game.canvas.height;
   const worldHeight = world.bounds.height;
 
+  const background = this.add.image(750, worldHeight - 500, 'background');
+  console.log(background)
+  background.scaleX = 2;
+  background.scaleY = 2;
+
   instance.player = this.physics.add.sprite(320, worldHeight - 200, 'adventurer');
   instance.player.alpha = 0;
   instance.player.visualBody = this.physics.add.sprite(320, worldHeight - 200 - 16, 'adventurer');
@@ -119,7 +124,7 @@ export default function () {
   this.cameras.main.startFollow(player);
   
   // set background color, so the sky is not black    
-  this.cameras.main.setBackgroundColor('#ccccff');
+  this.cameras.main.setBackgroundColor('#ddf8ff');
 
   instance.platforms = this.physics.add.staticGroup();
   instance.trampolines = this.physics.add.staticGroup();
