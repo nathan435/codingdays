@@ -90,13 +90,15 @@ export default function () {
   const worldHeight = world.bounds.height;
 
   instance.player = this.physics.add.sprite(320, worldHeight - 200, 'adventurer');
+  instance.player.alpha = 0;
+  instance.player.visualBody = this.physics.add.sprite(320, worldHeight - 200 - 16, 'adventurer');
+  instance.player.visualBody.body.allowGravity = false;
   const { player } = instance;
-  player.setDisplaySize(64, 64);
+  instance.player.visualBody.setDisplaySize(64, 64);
+  player.setDisplaySize(32, 32);
 
   player.setBounce(0);
   player.setCollideWorldBounds(true);
-  player.body.maxVelocity.x = 400;
-
 
   player.weapon = new Weapon('blood', 'blood-up', 1000, 60, 200, this, player);
 

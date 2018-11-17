@@ -13,20 +13,20 @@ export default function () {
   {
       player.setVelocityX(-210);
 
-      player.anims.play('left', true);
+      player.visualBody.anims.play('left', true);
       player.direction = 'left';
   }
   else if (cursors.right.isDown)
   {
       player.setVelocityX(210);
 
-      player.anims.play('right', true);
+      player.visualBody.anims.play('right', true);
       player.direction = 'right';
   }
   else
   {
       player.setVelocityX(0);
-      player.anims.play(`idle-${instance.player.direction}`);
+      player.visualBody.anims.play(`idle-${instance.player.direction}`);
   }
 
   if (cursors.space.isDown) {
@@ -53,4 +53,7 @@ export default function () {
   instance.monsters.children.iterate((monster) => {
     monster.x += 0.5;
 });
+    instance.player.visualBody.x = instance.player.x;
+    instance.player.visualBody.y = instance.player.y - 16;
+
 };
