@@ -63,22 +63,17 @@ function hitPlatform(monster, platform) {
   const monsterType = 'dwarf';
   const data = monsterData[monsterType];
 
-  console.log('ATTACK SHIT')
-  // monster.body.x += data.speedX;
   // FIXME this is a hack to keep the collison happening
   monster.setVelocityX(1);
-  // make sure he maints contact and didn't bounce back i guess
   monster.anims.play('dwarf-attack', true);
 
   platform.life -= 1;
   // block dead
   if (platform.life <= 0) {
-instance.tower.destroyBrick(platform);
+    console.log('BLOCK DEAD')
+    instance.tower.destroyBrick(platform);
     startWalking(monster, data)
   }
-
-  // This doesn't start him walking, seems to be required to keep him attacking
-  // monster.setVelocityX(1);
 }
 
 // Callback when monster touhes a platform
