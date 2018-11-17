@@ -73,9 +73,10 @@ function hitPlatform(monster, platform) {
   platform.life -= 1;
   // block dead
   if (platform.life <= 0) {
-    platform.disableBody(true, true);
+instance.tower.destroyBrick(platform);
     startWalking(monster, data)
   }
+
   // This doesn't start him walking, seems to be required to keep him attacking
   // monster.setVelocityX(1);
 }

@@ -4,6 +4,11 @@ import { createMonster } from '../monster';
 export var lifeText;
 
 import { Weapon } from '../weapon.js';
+import { Tower } from '../tower';
+
+const hitPlatform = (player, platform) => {
+  instance.tower.onHitPlatform(player, platform);
+}
 
 const hitTrampoline = (player, trampoline) => {
   const isOnIt = player.x >= trampoline.x - 16 && player.x <= trampoline.x + 16;
@@ -14,7 +19,7 @@ const hitTrampoline = (player, trampoline) => {
   }
 }
 
-function convertFallingBlockToPlatform(fallingBlock) {
+function convertFallingBlockToPlatform(fallingBlock, type) {
   if (!fallingBlock.destroyed) {
     fallingBlock.body.immovable = true;
     fallingBlock.destroyed = true;
@@ -22,21 +27,17 @@ function convertFallingBlockToPlatform(fallingBlock) {
     fallingBlock.destroy(true);
     // platform.destroy();
 
-    const block = instance.platforms.create(fallingBlock.x, Math.floor(fallingBlock.y / 64) * 64 +32, 'brick');
-    block.life = 100;
-
-    block.setInteractive();
-    block.on('pointerdown', () => { console.log({"blockleft": block.body.x, blockTop: block.body.y, blockBottom: block.body.y + block.body.height}) });
-    // console.log(fallingBlock)
+    instance.tower.addBlockPx(fallingBlock.x, fallingBlock.y, 'frozen');
   }
 }
 
 const fallingBlockFinalCollision = (platform, fallingBlock) => {
-  convertFallingBlockToPlatform(fallingBlock);
+  fallingBlock.y = fallingBlock.y - 20;
+  convertFallingBlockToPlatform(fallingBlock, 'brick');
 };
 
 const fallingBlockHit = (bullet, fallingBlock) => {
-  convertFallingBlockToPlatform(fallingBlock);
+  convertFallingBlockToPlatform(fallingBlock, 'frozen');
 
   if (!bullet.destroyed) {
     bullet.body.immovable = true;
@@ -87,6 +88,14 @@ function createAnimations() {
   this.anims.create({
     key: 'blood-up',
     frames: this.anims.generateFrameNumbers('blood'),
+    frameRate: 10,
+    yoyo: true,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'ice-up',
+    frames: this.anims.generateFrameNumbers('ice'),
     frameRate: 10,
     yoyo: true,
     repeat: -1
@@ -144,10 +153,12 @@ export default function () {
   player.setBounce(0);
   player.setCollideWorldBounds(true);
 
-  player.weapon = new Weapon('blood', 'blood-up', 1000, 60, 200, this, player);
+  player.weapon = new Weapon('ice', 'ice-up', 1000, 60, 200, this, player);
 
   player.life = 100;
   lifeText = this.add.text(16, 15200, 'Life: 100', { fontSize: '32px', fill: '#000' });
+
+  instance.tower = new Tower(this, worldHeight);
 
   createAnimations.call(this);
 
@@ -186,11 +197,12 @@ export default function () {
 
   this.forceSingleUpdate=true;
 
+  //createTower(this);
+
   this.physics.add.collider(instance.platforms, instance.fallingBlocks, fallingBlockFinalCollision);
   this.physics.add.collider(instance.player, instance.fallingBlocks);
   this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
-  this.physics.add.collider(instance.player, instance.trampolines, hitTrampoline);
-  this.physics.add.collider(instance.player, instance.platforms);
+  this.physics.add.collider(instance.player, instance.platforms, hitPlatform);
   this.physics.add.collider(instance.bullets, instance.fallingBlocks, fallingBlockHit);
 
   createMonster(this);
@@ -203,19 +215,18 @@ export default function () {
   this.time.addEvent({ delay: 2400, callback: spawnBlock, callbackScope: this, repeat: 1000});
 
   for (let i = 2; i < 18; i++) {
-    const bl = instance.platforms.create(i * 64 + 32, (worldHeight - 32), 'brick');
-    bl.setInteractive();
-    bl.on('pointerdown', () => { console.log({"blockleft": bl.body.x, blockTop: bl.body.y}) });
+    instance.tower.addBlock(i, 0, 'brick');
   }
-  instance.platforms.create(64 * 2 + 32, (worldHeight - 64 -32), 'brick');
-  instance.trampolines.create(64 * 3 + 32, (worldHeight - 64 -32), 'brick-bounce');
-  instance.platforms.create(64 * 4 + 32, (worldHeight - 64 -32), 'brick');
 
-  instance.platforms.create(64 * 4 + 32, worldHeight - (64 * 1 -32), 'brick');
-  instance.platforms.create(64 * 4 + 32, worldHeight - (64 * 2 -32), 'brick');
-  instance.platforms.create(64 * 4 + 32, worldHeight - (64 * 3 -32), 'brick');
-  instance.platforms.create(64 * 4 + 32, worldHeight - (64 * 4 -32), 'brick');
-  instance.platforms.create(64 * 4 + 32, worldHeight - (64 * 5 -32), 'brick');
+  instance.tower.addBlock(2, 1, 'brick');
+  instance.tower.addBlock(3, 1, 'trampoline');
+  instance.tower.addBlock(4, 1, 'brick');
+
+  instance.tower.addBlock(5, 1, 'brick');
+  instance.tower.addBlock(5, 2, 'brick');
+  instance.tower.addBlock(5, 3, 'brick');
+  instance.tower.addBlock(5, 4, 'brick');
+  instance.tower.addBlock(5, 5, 'brick');
 
   // Add debug keyboard controls
   this.input.keyboard.on('keydown', function (event) {

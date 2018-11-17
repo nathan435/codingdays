@@ -25,6 +25,11 @@ const preload = function () {
         { frameWidth: 150, frameHeight: 150}
     );
 
+    this.load.spritesheet('ice',
+        'assets/ice.png',
+        { frameWidth: 150, frameHeight: 150}
+    );
+
     instance.cursors = this.input.keyboard.addKeys({
         up:Phaser.Input.Keyboard.KeyCodes.W,
         down:Phaser.Input.Keyboard.KeyCodes.S,
