@@ -7,8 +7,10 @@ const preload = function () {
     this.load.image('brick-fire', 'assets/brick-fire.png');
     this.load.image('brick-moss', 'assets/brick-moss.png');
     this.load.image('brick-frozen', 'assets/brick-frozen.png');
-    this.load.image('ufo', 'assets/ufo.png');
+    this.load.image('brick-stone', 'assets/brick-stone.png');
     this.load.image('brick-bounce', 'assets/brick-bounce.png');
+    this.load.image('ufo', 'assets/ufo.png');
+    this.load.image('stone', 'assets/stone.png');
     this.load.spritesheet('adventurer',
         'assets/adventurer.png',
         { frameWidth: 32, frameHeight: 32 }

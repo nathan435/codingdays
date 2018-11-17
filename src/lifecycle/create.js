@@ -149,6 +149,10 @@ export default function () {
   background.scaleX = 2;
   background.scaleY = 2;
 
+  const stone = this.add.image(1000, worldHeight - 850, 'stone').setScale(0.3);
+  var stoneQty = 0;
+  var stoneText = this.add.text(1050, worldHeight - 850, '0', { fontSize: '32px', fill: '#000' })
+
   instance.player = this.physics.add.sprite(320, worldHeight - 200, 'adventurer');
   instance.player.alpha = 0;
   instance.player.visualBody = this.physics.add.sprite(320, worldHeight - 200 - 16, 'adventurer');
@@ -163,7 +167,7 @@ export default function () {
   player.weapon = new Weapon('ice', 'ice-up', 1000, 60, 200, this, player);
 
   player.life = 100;
-  lifeText = this.add.text(16, 15200, 'Life: 100', { fontSize: '32px', fill: '#000' });
+  lifeText = this.add.text(16, 15150, 'Life: 100', { fontSize: '32px', fill: '#000' });
 
   instance.tower = new Tower(this, worldHeight);
 
