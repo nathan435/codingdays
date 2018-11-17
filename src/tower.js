@@ -14,7 +14,7 @@ export class Tower {
         this.game = game;
         this.worldHeight = worldHeight;
         this.blocks = [];
-        this.revision = 0;
+        this.revision = 1;
 
         for (var i=0;i<=20;i++) {
             this.blocks[i] = [];
@@ -31,34 +31,86 @@ export class Tower {
         if (posx < 0 || posy < 0) {
             return null;
         }
+
+        var blockColumn = this.blocks[posx];
+        if (blockColumn[posy] === undefined) {
+            return null;
+        }
         
         return this.blocks[posx][posy];
     }
 
     getBrickPx(x, y) {
-        return this.blocks[this.snapX(x)][this.snapY(y)];
+        return getBrick(this.snapX(x), this.snapY(y));
     }
 
     destroyBrick(brick) {
-        if (brick.life <= 0) {
-            brick.disableBody(true, true);
-        }
-/*
+        brick.disableBody(true, true);
+        brick.removed = true;
+        this.blocks[brick.posx][brick.posy] = null;
+
         var r = this.revision + 1;
         this.revision = r;
 
         var bricksToCheck = [];
-        bricksToCheck.push(brick);
+        var allBlocks = instance.platforms.children.entries;
+
+        for (var i = 0; i < allBlocks.length; i++) {
+            var block = allBlocks[i];
+            if (block.removed) {
+                continue;
+            }
+
+            if (block.type === 'frozen') {
+                bricksToCheck.push(block);
+                block.revision = r;
+            } else if (block.posy === 0) {
+                bricksToCheck.push(block);
+                block.revision = r;
+            }
+        }
 
         while (bricksToCheck.length > 0) {
             var brickToCheck = bricksToCheck.pop();
+
             var nextBrick = this.getBrick(brickToCheck.posx + 1, brickToCheck.posy);
-            if (nextBrick !== null)
+            if (nextBrick !== null && nextBrick.revision !== r) {
+                nextBrick.revision = r;
+                bricksToCheck.push(nextBrick);
+            }
+
+            var nextBrick = this.getBrick(brickToCheck.posx - 1, brickToCheck.posy);
+            if (nextBrick !== null && nextBrick.revision !== r) {
+                nextBrick.revision = r;
+                bricksToCheck.push(nextBrick);
+            }
+
+            var nextBrick = this.getBrick(brickToCheck.posx, brickToCheck.posy + 1);
+            if (nextBrick !== null && nextBrick.revision !== r) {
+                nextBrick.revision = r;
+                bricksToCheck.push(nextBrick);
+            }
+
+            var nextBrick = this.getBrick(brickToCheck.posx, brickToCheck.posy - 1);
+            if (nextBrick !== null && nextBrick.revision !== r) {
+                nextBrick.revision = r;
+                bricksToCheck.push(nextBrick);
+            }
         }
         
+        
+        for (var i = 0; i < allBlocks.length; i++) {
+            var block = allBlocks[i];
+            if (!block.removed && block.revision !== r) {
+               this.convertBlockToFallingBlock(block);
+            }
+        }
+    }
 
-        this.blocks[brick.posx][brick.posy] = null;
-        */
+    convertBlockToFallingBlock(block) {
+        block.disableBody(true, true);
+        block.removed = true;
+        this.addFallingBlock(block.x, block.y);
     }
 
     snapY(y) {
@@ -82,12 +134,27 @@ export class Tower {
         var posy = this.snapY(block.y);
         block.posx = posx;
         block.posy = posy;
-
         block.type = type;
+        block.revision = 0;
+        block.removed = false;
 
         block.life = 100;
         block.setInteractive();
         block.on('pointerdown', () => { console.log({"blockleft": block.body.x, blockTop: block.body.y, blockBottom: block.body.y + block.body.height}) });
+    }
+
+    addFallingBlock (x, y) {
+        let block = instance.fallingBlocks.create(x, y, 'brick');
+        block.alpha = 0.3;
+        block.tint = 0x000000;
+        block.body.allowGravity = false;
+        block.body.immovable = true;
+        block.body.moves = false;
+        block.setInteractive();
+        this.game.input.setDraggable(block);
+        this.game.input.on('drag', function (pointer, gameObject, dragX, dragY) {
+          gameObject.x = Math.round(dragX / 64) * 64 +32;
+        });
     }
 
     addBlockPx(x, y, type) {
