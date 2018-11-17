@@ -31,19 +31,18 @@ export function spawnMonster(game, x=500, y=15800) {
   monster.setInteractive();
 
   monster.on('pointerdown', () => { console.log("monster data", {
-   monsterRight: monster.body.x + monster.body.width,
-   monsterBottom: monster.body.y + monster.body.height,
+    monsterRight: monster.body.x + monster.body.width,
+    monsterBottom: monster.body.y + monster.body.height,
   })});
 }
 
-<<<<<<< HEAD
 const hitPlayer = (monster, player) => {
   player.life -= 10;
   lifeText.setText('Life :' + player.life);
   if (player.life <= 0){
     player.setTint(0xff0000);
     player.anims.play('die');
-    
+
     gameOver = true;
   }
 };
@@ -77,7 +76,7 @@ export function monsterTouchesPlatform(monster, platform) {
 export function createMonster(game) {
   const worldHeight = game.physics.world.bounds.height;
   const gameHeight = game.game.canvas.height;
-  
+
   game.physics.add.collider(instance.monsters, instance.player, hitPlayer);
   game.physics.add.collider(instance.monsters, instance.platforms, monsterTouchesPlatform);
   game.physics.add.collider(instance.monsters, instance.fallingBlocks);

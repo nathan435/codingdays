@@ -21,7 +21,7 @@ const hitPlayer = (monster, player) => {
   if (player.life <= 0){
     player.setTint(0xff0000);
     player.anims.play('die');
-    
+
     gameOver = true;
   }
 }
@@ -36,7 +36,7 @@ function convertFallingBlockToPlatform(fallingBlock) {
 
     const block = instance.platforms.create(fallingBlock.x, Math.floor(fallingBlock.y / 64) * 64 +32, 'brick');
     block.life = 100;
-    
+
     block.setInteractive();
     block.on('pointerdown', () => { console.log({"blockleft": block.body.x, blockTop: block.body.y, blockBottom: block.body.y + block.body.height}) });
     // console.log(fallingBlock)
@@ -72,36 +72,36 @@ function createAnimations() {
   });
 
   this.anims.create({
-      key: 'left',
-      frames: this.anims.generateFrameNumbers('adventurer', { start: 117, end: 124 }),
-      frameRate: 10,
-      repeat: -1
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('adventurer', { start: 117, end: 124 }),
+    frameRate: 10,
+    repeat: -1
   });
-  
+
   this.anims.create({
-      key: 'turn',
-      frames: [ { key: 'adventurer', frame: 4 } ],
-      frameRate: 20
+    key: 'turn',
+    frames: [ { key: 'adventurer', frame: 4 } ],
+    frameRate: 20
   });
 
   this.anims.create({
     key: 'fly',
     frames: [ { key: 'ufo', frame: 0 } ],
   });
-  
+
   this.anims.create({
-      key: 'right',
-      frames: this.anims.generateFrameNumbers('adventurer', { start: 13, end: 20 }),
-      frameRate: 10,
-      repeat: -1
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('adventurer', { start: 13, end: 20 }),
+    frameRate: 10,
+    repeat: -1
   });
 
   this.anims.create({
-      key: 'blood-up',
-      frames: this.anims.generateFrameNumbers('blood'),
-      frameRate: 10,
-      yoyo: true,
-      repeat: -1
+    key: 'blood-up',
+    frames: this.anims.generateFrameNumbers('blood'),
+    frameRate: 10,
+    yoyo: true,
+    repeat: -1
   });
 
   this.anims.create({
@@ -114,9 +114,23 @@ function createAnimations() {
     key: 'dwarf-attack',
     frames: this.anims.generateFrameNumbers('dwarf', {start: 20, end: 26}),
     frameRate: 13,
-    yoyo: false,
     repeat: 0
   });
+
+  this.anims.create({
+    key: 'dwarf-walk',
+    frames: this.anims.generateFrameNames('dwarf', {start: 10, end: 17}),
+    // frames: this.anims.generateFrameNames('dwarf', {start: 28, end: 31}),
+    frameRate: 20,
+    repeat: -1
+  });
+
+  // idle with only one frame, so repeat is not neaded
+  // this.anims.create({
+  // key: 'idle',
+  // frames: [{key: 'player', frame: 'p1_stand'}],
+  // frameRate: 10,
+  // });
 }
 
 export default function () {
@@ -148,13 +162,13 @@ export default function () {
   lifeText = this.add.text(16, 16, 'Life: 100', { fontSize: '32px', fill: '#000' });
 
   createAnimations.call(this);
-  
+
   console.log(this.physics.world)
   // set bounds so the camera won't go outside the game world
   this.cameras.main.setBounds(0, 0, world.bounds.width, world.bounds.height);
   // make the camera follow the player
   this.cameras.main.startFollow(player);
-  
+
   // set background color, so the sky is not black    
   this.cameras.main.setBackgroundColor('#ddf8ff');
 
@@ -176,8 +190,8 @@ export default function () {
       if (gameObject.clicked) gameObject.fallFast = true;
       gameObject.clicked = true;
       this.time.addEvent({ delay: 400, callback: () => {
-        gameObject.clicked = false;
-      }, callbackScope: this});
+          gameObject.clicked = false;
+        }, callbackScope: this});
     }
     // gameObject.disableBody(true, true);
   });
@@ -197,7 +211,7 @@ export default function () {
   //this.physics.add.collider(instance.monsters, instance.fallingBlocks);
 
   this.add.text(100, 100, 'Best Game Ever!')
-  
+
   this.time.addEvent({ delay: 2400, callback: spawnBlock, callbackScope: this, repeat: 1000});
 
   for (let i = 2; i < 18; i++) {
