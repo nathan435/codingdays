@@ -1,12 +1,11 @@
 import instance from './instance';
+import { lifeText } from './lifecycle/create'
 
 const monsterData = {
   dwarf: {
     sprite: 'dwarf',
     x: 50,
     y: 50,
-    x: 100,
-    y: 100,
     velocityX: 50,
   },
   adventurer: {
@@ -36,14 +35,17 @@ export function spawnMonster(game, x=500, y=15800) {
   })});
 }
 
-const hitPlayer = (monster, player) => {
+const hitPlayer = (player, monster) => {
+  console.log('touched in monster');
+  console.log(player);
   player.life -= 10;
   lifeText.setText('Life :' + player.life);
   if (player.life <= 0){
+    console.log('dead');
+    player.setVelocityY(-800);
+    game.physics.pause();
     player.setTint(0xff0000);
     player.anims.play('die');
-
-    gameOver = true;
   }
 };
 
@@ -77,7 +79,7 @@ export function createMonster(game) {
   const worldHeight = game.physics.world.bounds.height;
   const gameHeight = game.game.canvas.height;
 
-  game.physics.add.collider(instance.monsters, instance.player, hitPlayer);
+  game.physics.add.collider(instance.player, instance.monsters, hitPlayer);
   game.physics.add.collider(instance.monsters, instance.platforms, monsterTouchesPlatform);
   game.physics.add.collider(instance.monsters, instance.fallingBlocks);
 

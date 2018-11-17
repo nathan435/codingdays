@@ -1,9 +1,8 @@
 import instance from '../instance';
 import { createMonster } from '../monster';
 
-var lifeText;
+export var lifeText;
 
-import { spawnMonster } from '../monster';
 import { Weapon } from '../weapon.js';
 
 const hitTrampoline = (player, trampoline) => {
@@ -12,17 +11,6 @@ const hitTrampoline = (player, trampoline) => {
     player.setVelocityY(-1100);
     trampoline.bounced = true;
     setTimeout(() => trampoline.bounced = false, 1000);
-  }
-}
-
-const hitPlayer = (monster, player) => {
-  player.life -= 10;
-  lifeText.setText('Life :' + player.life)
-  if (player.life <= 0){
-    player.setTint(0xff0000);
-    player.anims.play('die');
-
-    gameOver = true;
   }
 }
 
@@ -106,7 +94,7 @@ function createAnimations() {
 
   this.anims.create({
     key: 'die',
-    frames: [ { key:'adventurer', frame: 59} ],
+    frames: [ { key:'adventurer', frame: 80} ],
     frameRate: 10,
   });
 
@@ -159,7 +147,7 @@ export default function () {
   player.weapon = new Weapon('blood', 'blood-up', 1000, 60, 200, this, player);
 
   player.life = 100;
-  lifeText = this.add.text(16, 16, 'Life: 100', { fontSize: '32px', fill: '#000' });
+  lifeText = this.add.text(16, 15400, 'Life: 100', { fontSize: '32px', fill: '#000' });
 
   createAnimations.call(this);
 
