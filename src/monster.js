@@ -4,10 +4,8 @@ import { lifeText } from './lifecycle/create'
 const monsterData = {
   dwarf: {
     sprite: 'dwarf',
-    x: 50,
-    y: 50,
-    x: 100,
-    y: 100,
+    x: 64,
+    y: 64,
     speedX: 0.5,
     velocityX: 50,
   },
@@ -18,7 +16,6 @@ const monsterData = {
 };
 
 function startWalking(monster, data) {
-  console.log('start velocity to the right')
   monster.setVelocityX(data.velocityX);
   monster.anims.play('dwarf-walk', true);
 }
@@ -28,7 +25,6 @@ export function spawnMonster(game, x=500, y=15800) {
   const data = monsterData[monsterType];
   const monster = instance.monsters.create(x, y, data.sprite);
 
-  console.log('start walking on spawn!')
   startWalking(monster, data)
 
   monster.setDisplaySize(data.x, data.y);
@@ -39,17 +35,10 @@ export function spawnMonster(game, x=500, y=15800) {
   monster.direction = 'left';
 
   monster.setInteractive();
-
-  monster.on('pointerdown', () => { console.log("monster data", {
-    monsterRight: monster.body.x + monster.body.width,
-    monsterBottom: monster.body.y + monster.body.height,
-  })});
 }
 
 const hitPlayer = (player, monster, game) => {
-
-  console.log('hit');
-
+  monster.anims.play('dwarf-attack-fast', false);
   player.life -= 10;
   lifeText.setText('Life :' + player.life);
   if (player.life <= 0){
@@ -71,7 +60,6 @@ function hitPlatform(monster, platform) {
   platform.life -= 1;
   // block dead
   if (platform.life <= 0) {
-    console.log('BLOCK DEAD')
     instance.tower.destroyBrick(platform);
     startWalking(monster, data)
   }
@@ -114,11 +102,4 @@ export function createMonster(game) {
 
 // Called on every frame Update
 export function updateMonster(game) {
-  // const monsterType = 'dwarf';
-  // const data = monsterData[monsterType];
-
-  // instance.monsters.children.iterate((monster) => {
-    // monster.anims.play('dwarf-walk', false);
-    // monster.x += data.speedX;
-  // });
 }

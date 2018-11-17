@@ -1,5 +1,5 @@
 import instance from '../instance';
-import { createMonster } from '../monster';
+import { createMonster, spawnMonster } from '../monster';
 
 export var lifeText;
 
@@ -115,6 +115,13 @@ function createAnimations() {
   });
 
   this.anims.create({
+    key: 'dwarf-attack-fast',
+    frames: this.anims.generateFrameNumbers('dwarf', {start: 20, end: 26}),
+    frameRate: 25,
+    repeat: 5
+  });
+
+  this.anims.create({
     key: 'dwarf-walk',
     frames: this.anims.generateFrameNames('dwarf', {start: 10, end: 17}),
     // frames: this.anims.generateFrameNames('dwarf', {start: 28, end: 31}),
@@ -178,8 +185,6 @@ export default function () {
   instance.bullets = this.physics.add.group();
   console.log(this.input)
 
-  //spawnMonster(this)
-
   player.direction = 'left';
 
   player.setInteractive();
@@ -213,6 +218,7 @@ export default function () {
   this.add.text(100, 100, 'Best Game Ever!')
 
   this.time.addEvent({ delay: 2400, callback: spawnBlock, callbackScope: this, repeat: 1000});
+  this.time.addEvent({ delay: 1400, callback: monstersFromSky , callbackScope: this, repeat: 1000});
 
   for (let i = 2; i < 18; i++) {
     instance.tower.addBlock(i, 0, 'brick');
@@ -242,7 +248,7 @@ export default function () {
 
 }
 
-function spawnBlock () {
+function spawnBlock() {
   let x = Math.round(Math.random() * 15) + 3;
   const gameHeight = this.game.canvas.height;
   let block = instance.fallingBlocks.create(64 * x + 32, instance.player.y - gameHeight, 'brick');
@@ -256,4 +262,18 @@ function spawnBlock () {
   this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
     gameObject.x = Math.round(dragX / 64) * 64 +32;
   });
+}
+
+function monstersFromSky () {
+  let spawn = Math.random() < 0.7;
+  if (!spawn) {
+    console.log('NO SPAWN MONStER')
+    return false;
+  }
+  const gameHeight = this.game.canvas.height;
+  const y = instance.player.y - gameHeight
+
+  let x = Math.round(Math.random() * 15) + 3;
+  let x2 = 64 * x + 32;
+  spawnMonster(this, x2, y)
 }
