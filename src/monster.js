@@ -6,6 +6,9 @@ const monsterData = {
     sprite: 'dwarf',
     x: 50,
     y: 50,
+    x: 100,
+    y: 100,
+    speedX: 0.5,
     velocityX: 50,
   },
   adventurer: {
@@ -14,12 +17,20 @@ const monsterData = {
   },
 };
 
+function startWalking(monster, data) {
+  console.log('start velocity to the right')
+  monster.setVelocityX(data.velocityX);
+  monster.anims.play('dwarf-walk', true);
+}
+
 export function spawnMonster(game, x=500, y=15800) {
   const monsterType = 'dwarf';
   const data = monsterData[monsterType];
   const monster = instance.monsters.create(x, y, data.sprite);
 
-  monster.setVelocityX(data.velocityX);
+  console.log('start walking on spawn!')
+  startWalking(monster, data)
+
   monster.setDisplaySize(data.x, data.y);
 
   monster.setBounce(0);
@@ -48,32 +59,41 @@ const hitPlayer = (player, monster, game) => {
   }
 };
 
-function monsterAttack(monster, platform) {
-  monster.anims.play('dwarf-attack', false);
+function hitPlatform(monster, platform) {
+  const monsterType = 'dwarf';
+  const data = monsterData[monsterType];
 
-  monster.setVelocityX(0);
+  console.log('ATTACK SHIT')
+  // monster.body.x += data.speedX;
+  // FIXME this is a hack to keep the collison happening
+  monster.setVelocityX(1);
+  // make sure he maints contact and didn't bounce back i guess
+  monster.anims.play('dwarf-attack', true);
 
   platform.life -= 1;
+  // block dead
   if (platform.life <= 0) {
     platform.disableBody(true, true);
-
+    startWalking(monster, data)
   }
   // This doesn't start him walking, seems to be required to keep him attacking
-  monster.setVelocityX(50);
+  // monster.setVelocityX(1);
 }
 
+// Callback when monster touhes a platform
 export function monsterTouchesPlatform(monster, platform) {
 
   const monsterBottom = monster.body.y + monster.body.height;
   const boxTop = platform.body.y;
 
   const sameRow = monsterBottom > boxTop;
-  if (!sameRow) {
-    return false;
+  // Attack the box
+  if (sameRow) {
+    hitPlatform(monster, platform);
   }
-  monsterAttack(monster, platform);
 }
 
+// Called on Game Create
 export function createMonster(game) {
   const worldHeight = game.physics.world.bounds.height;
   const gameHeight = game.game.canvas.height;
@@ -90,7 +110,18 @@ export function createMonster(game) {
   });
 
   // Add debug button to spawn monsters
-  const spawnMonsterButton = game.add.text(100, 100, 'Spawn Monster!');
-  spawnMonsterButton.setInteractive();
-  spawnMonsterButton.on('pointerdown', () => { spawnMonster(this, 0, 0) });
+  // const spawnMonsterButton = game.add.text(100, 100, 'Spawn Monster!');
+  // spawnMonsterButton.setInteractive();
+  // spawnMonsterButton.on('pointerdown', () => { spawnMonster(this, 0, 0) });
+}
+
+// Called on every frame Update
+export function updateMonster(game) {
+  // const monsterType = 'dwarf';
+  // const data = monsterData[monsterType];
+
+  // instance.monsters.children.iterate((monster) => {
+    // monster.anims.play('dwarf-walk', false);
+    // monster.x += data.speedX;
+  // });
 }
