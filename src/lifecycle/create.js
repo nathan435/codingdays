@@ -47,6 +47,17 @@ const fallingBlockHit = (bullet, fallingBlock) => {
   }
 }
 
+const platformBlockHit = (bullet, block) => {
+  convertBlockToStoneBlock(block);
+
+  if (!bullet.destroyed) {
+    bullet.body.immovable = true;
+    bullet.destroyed = true;
+    bullet.disableBody(true, true);
+    bullet.destroy(true);
+  }
+}
+
 function createAnimations() {
   this.anims.create({
     key: 'idle-right',
@@ -213,6 +224,7 @@ export default function () {
   this.physics.add.collider(instance.fallingBlocks, instance.fallingBlocks);
   this.physics.add.collider(instance.player, instance.platforms, hitPlatform);
   this.physics.add.collider(instance.bullets, instance.fallingBlocks, fallingBlockHit);
+  this.physics.add.collider(instance.bullets, instance.platforms, platformBlockHit);
 
   createMonster(this);
   //this.physics.add.collider(instance.monsters, instance.player, hitPlayer);

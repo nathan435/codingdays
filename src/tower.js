@@ -113,6 +113,12 @@ export class Tower {
         this.addFallingBlock(block.x, block.y);
     }
 
+    convertBlockToStoneBlock(block) {
+        block.disableBody(true, true);
+        block.removed = true;
+        this.addStoneBlock(block.x, block.y);
+    }
+
     snapY(y) {
         return Math.floor((this.worldHeight - y - 32) / 64);
     }
@@ -138,7 +144,13 @@ export class Tower {
         block.revision = 0;
         block.removed = false;
 
-        block.life = 100;
+        if(type === 'stone'){
+            block.life = 500;
+        }
+        else{
+            block.life = 100;
+        }
+        
         block.setInteractive();
         block.on('pointerdown', () => { console.log({"blockleft": block.body.x, blockTop: block.body.y, blockBottom: block.body.y + block.body.height}) });
     }
@@ -190,6 +202,13 @@ export class Tower {
         block.onHit = null;
 
         this.initBlock(block, 'frozen');
+    }
+
+    addStoneBlock(posx, posy) {
+        const block = instance.platforms.create(this.getPxlX(posx), this.getPxlY(posy), 'brick-stone');
+        block.onHit = null;
+
+        this.initBlock(block, 'stone');
     }
 }
 
