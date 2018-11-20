@@ -1,4 +1,5 @@
 import 'phaser';
+import constants from './constants';
 
 import preload from './lifecycle/preload';
 import create from './lifecycle/create';
@@ -13,11 +14,11 @@ export default {
     default: 'arcade',
     arcade: {
         gravity: { y: 2000 },
-        debug: true
+        debug: false,
     }
   },
-  width: 1280,
-  height: 896,
+  width: constants.gameWidth,
+  height: constants.gameHeight,
   scene: {
       preload,
       create,

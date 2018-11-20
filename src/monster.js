@@ -1,5 +1,5 @@
 import instance from './instance';
-import { lifeText } from './lifecycle/create'
+import state from './ui/state';
 
 const monsterData = {
   dwarf: {
@@ -39,9 +39,8 @@ export function spawnMonster(game, x=500, y=15800) {
 
 const hitPlayer = (player, monster, game) => {
   monster.anims.play('dwarf-attack-fast', false);
-  player.life -= 10;
-  lifeText.setText('Life :' + player.life);
-  if (player.life <= 0){
+  state.player.health -= 10;
+  if (state.player.health <= 0){
     player.setVelocityY(-2000);
     game.physics.pause();
     player.anims.play('die');

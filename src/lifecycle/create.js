@@ -1,8 +1,5 @@
 import instance from '../instance';
 import { createMonster, spawnMonster } from '../monster';
-
-export var lifeText;
-
 import { Weapon } from '../weapon.js';
 import { Tower } from '../tower';
 
@@ -156,13 +153,8 @@ export default function () {
   const worldHeight = world.bounds.height;
 
   const background = this.add.image(750, worldHeight - 500, 'background');
-  console.log(background)
   background.scaleX = 2;
   background.scaleY = 2;
-
-  const stone = this.add.image(1000, worldHeight - 850, 'stone').setScale(0.3);
-  var stoneQty = 0;
-  var stoneText = this.add.text(1050, worldHeight - 850, '0', { fontSize: '32px', fill: '#000' })
 
   instance.player = this.physics.add.sprite(320, worldHeight - 200, 'adventurer');
   instance.player.alpha = 0;
@@ -176,9 +168,6 @@ export default function () {
   player.setCollideWorldBounds(true);
 
   player.weapon = new Weapon('ice', 'ice-up', 1000, 60, 200, this, player);
-
-  player.life = 100;
-  lifeText = this.add.text(16, 15150, 'Life: 100', { fontSize: '32px', fill: '#000' });
 
   instance.tower = new Tower(this, worldHeight);
 
@@ -198,7 +187,6 @@ export default function () {
   instance.fallingBlocks = this.physics.add.group();
   instance.monsters = this.physics.add.group()
   instance.bullets = this.physics.add.group();
-  console.log(this.input)
 
   player.direction = 'left';
 
@@ -230,8 +218,6 @@ export default function () {
   //this.physics.add.collider(instance.monsters, instance.player, hitPlayer);
   //this.physics.add.collider(instance.monsters, instance.platforms, monsterTouchesPlatform);
   //this.physics.add.collider(instance.monsters, instance.fallingBlocks);
-
-  this.add.text(100, 100, 'Best Game Ever!')
 
   this.time.addEvent({ delay: 2400, callback: spawnBlock, callbackScope: this, repeat: 1000});
   this.time.addEvent({ delay: 1400, callback: monstersFromSky , callbackScope: this, repeat: 1000});
@@ -283,7 +269,6 @@ function spawnBlock() {
 function monstersFromSky () {
   let spawn = Math.random() < 0.7;
   if (!spawn) {
-    console.log('NO SPAWN MONStER')
     return false;
   }
   const gameHeight = this.game.canvas.height;
